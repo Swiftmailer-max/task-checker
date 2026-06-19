@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<form id="form">
+    <input type="text" name="answer" placeholder="Twoja odpowiedź">
+    <button type="submit">Sprawdź</button>
+</form>
+
+<p id="result"></p>
+
+<script>
+const base = `http://${window.location.hostname}:8205`;
+
+document.getElementById('form').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  const data = {
+    answer: document.querySelector('[name="answer"]').value
+  };
+
+  fetch(new URL('/check', base), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  .then(res => res.json())
+  .then(res => {
+    document.getElementById('result').innerText = res.feedback;
+  })
+  .catch(err => console.error(err));
+});
+</script>
